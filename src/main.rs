@@ -16,6 +16,7 @@ fn main() {
 #[derive(Debug)]
 pub struct Timer {
     max_count: u64,
+    minutes: bool,
 }
 
 /// Method implementation for the Timer struct.
@@ -24,6 +25,16 @@ impl Timer {
     pub fn new(max_count: u64) -> Self {
         Timer {
             max_count: max_count,
+            minutes: false,
+        }
+    }
+
+    /// `new_with_minutes` method implementation, with `max_count` mandatory
+    /// and the time set in minutes
+    pub fn new_with_minutes(max_count: u64) -> Self {
+        Timer {
+            max_count: max_count,
+            minutes: true,
         }
     }
 }
@@ -37,6 +48,7 @@ mod tests {
     fn test_timer_new() {
         let timer = Timer::new(12);
         assert_eq!(12, timer.max_count);
+        assert!(!timer.minutes);
     }
 
     #[test]
