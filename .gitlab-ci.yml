@@ -4,11 +4,6 @@ test:cargo:
   script:
     - rustc --version && cargo --version  # Print version info for debugging
     - cargo test --workspace --verbose
-kcov:cargo:
-  script:
-    - apt-get install kcov
-    - cargo install cargo-kcov
-    - cargo kcov -o coverage -- --exclude-patter=cargo,include,rustup
 pages:
   script:
     - cargo doc --no-deps
