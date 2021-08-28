@@ -1,4 +1,0 @@
-var searchIndex = JSON.parse('{\
-"timer":{"doc":"TimerIt - A simple timer in Rust","t":[5,0,3,11,11,11,11,11,11,12,12,11,11,11,11,11],"n":["main","timer","Timer","borrow","borrow_mut","fmt","from","init","into","max_count","minutes","new","start","try_from","try_into","type_id"],"q":["timer","","timer::timer","","","","","","","","","","","","",""],"d":["","Timer module","Timer struct, with the <code>max_count</code> variable to be set with …","","","","","Initialises a new Timer with the command line arguments …","","","","<code>new</code> method implementation, with <code>max_count</code> mandatory.","Starts the timer with the given time","","",""],"i":[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],"f":[[[]],null,null,[[]],[[]],[[["formatter",3]],["result",6]],[[]],[[["vec",3],["string",3]],["timer",3]],[[]],null,null,[[["u64",15]]],[[]],[[],["result",4]],[[],["result",4]],[[],["typeid",3]]],"p":[[3,"Timer"]]}\
-}');
-if (window.initSearch) {window.initSearch(searchIndex)};
