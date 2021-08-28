@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Timer","Timer struct, with the `max_count` variable to be set with the number or seconds or minutes."]]});
