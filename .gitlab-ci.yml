@@ -29,9 +29,8 @@ test:cargo:
     - cargo test --workspace --verbose
 kcov:cargo:
   script:
-    - apt-get install cmake g++ pkg-config jq
     - apt-get install libcurl4-openssl-dev libelf-dev libdw-dev binutils-dev libiberty-dev
-    - cargo kcov --print-install-kcov-sh | sh
+    - apt-get install kcov
     - cargo install cargo-kcov
     - cargo kcov -o coverage -- --exclude-patter=cargo,include,rustup
 pages:
