@@ -34,19 +34,15 @@ impl Timer {
     /// line arguments passed in the argument `args`.
     pub fn init(args: Vec<String>) -> crate::timer::Timer {
         let mut tmr = crate::timer::Timer::new(0);
-        for (index, arg) in args.iter().enumerate() {
-            if index > 0 {
+        args.into_iter()
+            .filter(|arg| arg == "-m" || !arg.parse::<u64>().is_err())
+            .for_each(|arg| {
                 if arg == "-m" {
-                    eprintln!("Time will be set in minutes!");
                     tmr.minutes = true;
                 } else if tmr.max_count == 0 {
-                    match arg.parse::<u64>() {
-                        Ok(n) => tmr.max_count = n,
-                        Err(e) => eprintln!("Error while parsing argument {}: {}", arg, e),
-                    };
+                    tmr.max_count = arg.parse::<u64>().unwrap();
                 }
-            }
-        }
+            });
         tmr
     }
 
@@ -116,7 +112,7 @@ mod tests {
             String::from(""),
             "-m".to_string(),
             "12".to_string(),
-            "13".to_string(),
+            "c".to_string(),
         ];
         let tmr = Timer::init(args);
         assert_eq!(12, tmr.max_count);
