@@ -27,9 +27,6 @@ test:cargo:
   script:
     - rustc --version && cargo --version  # Print version info for debugging
     - cargo test --workspace --verbose
-doc:cargo:
-  script:
-    - cargo doc --no-deps
 kcov:cargo:
   script:
     - apt-get install cmake g++ pkg-config jq
@@ -38,6 +35,8 @@ kcov:cargo:
     - cargo install cargo-kcov
     - cargo kcov -o coverage -- --exclude-patter=cargo,include,rustup
 pages:
+  script:
+    - cargo doc --no-deps
   artifacts:
     paths:
       - target/doc/timer
