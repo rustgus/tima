@@ -46,7 +46,8 @@ impl Timer {
         tmr
     }
 
-    /// Starts the timer with the given time
+    /// Starts the timer with the underlying time
+    /// in Timer::max_count.
     pub fn start(&self) {
         let time = if self.minutes {
             self.max_count * 60
