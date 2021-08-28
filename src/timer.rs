@@ -25,7 +25,7 @@ impl Timer {
     /// `new` method implementation, with `max_count` mandatory.
     pub fn new(max_count: u64) -> Self {
         Timer {
-            max_count: max_count,
+            max_count,
             minutes: false,
         }
     }
@@ -65,6 +65,15 @@ impl Timer {
 mod tests {
     use super::*;
     use std::env::args;
+
+    #[test]
+    fn test_timer() {
+        let tmr = Timer {
+            max_count: 12,
+            minutes: false,
+        };
+        assert_eq!(12, tmr.max_count);
+    }
 
     #[test]
     fn test_timer_new() {
