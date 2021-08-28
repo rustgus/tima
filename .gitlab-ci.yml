@@ -6,7 +6,7 @@ test:cargo:
     - cargo test --workspace --verbose
 pages:
   script:
-    - cargo doc --no-deps
+    - cargo doc --no-deps 
   artifacts:
     paths:
-      - target/doc/timer
+      - public
