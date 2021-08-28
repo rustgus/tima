@@ -27,4 +27,17 @@ test:cargo:
   script:
     - rustc --version && cargo --version  # Print version info for debugging
     - cargo test --workspace --verbose
+doc:cargo:
+  script:
     - cargo doc --no-deps
+kcov:cargo:
+  script:
+    - cargo kcov -o coverage -- --exclude-patter=cargo,include,rustup
+pages:
+  script:
+    - gem install bundler
+    - bundle install
+    - bundle exec jekyll build -d public
+  artifacts:
+    paths:
+      - target/doc/timer
