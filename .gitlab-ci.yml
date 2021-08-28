@@ -32,13 +32,5 @@ doc:cargo:
     - cargo doc --no-deps
 kcov:cargo:
   script:
-    - cargo install kcov
+    - cargo install cargo-kcov
     - cargo kcov -o coverage -- --exclude-patter=cargo,include,rustup
-pages:
-  script:
-    - gem install bundler
-    - bundle install
-    - bundle exec jekyll build -d public
-  artifacts:
-    paths:
-      - target/doc/timer
