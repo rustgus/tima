@@ -32,6 +32,7 @@ doc:cargo:
     - cargo doc --no-deps
 kcov:cargo:
   script:
+    - cargo install kcov
     - cargo kcov -o coverage -- --exclude-patter=cargo,include,rustup
 pages:
   script:
