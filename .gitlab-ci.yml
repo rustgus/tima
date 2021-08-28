@@ -37,3 +37,7 @@ kcov:cargo:
     - cargo kcov --print-install-kcov-sh | sh
     - cargo install cargo-kcov
     - cargo kcov -o coverage -- --exclude-patter=cargo,include,rustup
+pages:
+  artifacts:
+    paths:
+      - target/doc/timer
