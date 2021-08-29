@@ -1,5 +1,5 @@
 [package]
-name = "timer"
+name = "tima"
 version = "0.1.0"
 authors = ["Gus Garcia <pythongus@gmail.com>"]
 edition = "2018"
