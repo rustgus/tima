@@ -6,7 +6,7 @@ test:cargo:
     - cargo test --workspace --verbose
 pages:
   script:
-    - cargo doc --no-deps --target-dir public
+    - cargo doc --no-deps --bins --target-dir public
   artifacts:
     paths:
       - public

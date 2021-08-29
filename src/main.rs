@@ -1,18 +1,18 @@
-//! TimerIt - A simple timer in Rust
+//! Tima - A simple timer for humans in Rust
 //!
 //! Using the timer:
 //! ```
-//! timer <sec|min> [-m]
+//! tima <sec|min> [-m]
 //! ```
 //! where 5 is the number of seconds
 //! or minutes, with the `-m` option.
-mod timer;
+mod tima;
 
 use std::env;
 
 fn main() {
-    let tmr = crate::timer::Timer::init(env::args().collect());
-    println!("Timer started");
+    let tmr = crate::tima::Tima::init(env::args().skip(1).collect());
+    println!("Tima started");
     tmr.start();
-    println!("Timer finished");
+    println!("Tima finished");
 }
