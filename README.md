@@ -16,11 +16,17 @@ Any combination of
   * h, hour, hours
   * m, minute, minutes
   * s, sec, seconds
+  * l, milli, millisec, millisecond, milliseconds
 
 * Time options
   * ##:##, ##:##:## 
 
 is valid. Also, the conjunction `and` can be used at any point with the string options. The parameters are case insensitive.
+
+### Other options
+
+* -q: quiet mode, no messages displayed
+* -d: delay to start the timer. Can also be a combination of the above
 
 ## Coverage
 
