@@ -1,4 +1,4 @@
-//! Tima module
+//! Tima engine module
 //!
 //! Provides the Tima struct and methods
 use std::thread::sleep;
@@ -9,7 +9,7 @@ use std::time::Duration;
 ///
 /// Example:
 /// ```
-/// # use tima::tima::Tima;
+/// # use tima::engine::Tima;
 /// let tmr = Tima::new(12);
 /// assert_eq!(12, tmr.max_count);
 /// assert!(!tmr.minutes);
@@ -18,6 +18,11 @@ use std::time::Duration;
 pub struct Tima {
     pub max_count: u64,
     pub minutes: bool,
+}
+
+struct Value {
+    a_str: String,
+    a_num: u64,
 }
 
 /// Method implementation for the Timer struct.
@@ -33,17 +38,39 @@ impl Tima {
     /// Initialises a new Timer with the command
     /// line arguments passed in the argument `args`.
     pub fn init(args: Vec<String>) -> Self {
-        let mut tmr = crate::tima::Tima::new(0);
+        let mut tmr = Tima::new(0);
         args.into_iter()
-            .filter(|arg| arg == "-m" || !arg.parse::<u64>().is_err())
-            .for_each(|arg| {
-                if arg == "-m" {
-                    tmr.minutes = true;
-                } else if tmr.max_count == 0 {
-                    tmr.max_count = arg.parse::<u64>().unwrap();
-                }
-            });
+            .map(Tima::convert_arguments)
+            .filter(Tima::valid_values)
+            .for_each(Tima::set_values(&mut tmr));
         tmr
+    }
+
+    fn convert_arguments(arg: String) -> Value {
+        match arg.parse::<u64>() {
+            Ok(n) => Value {
+                a_str: "".to_string(),
+                a_num: n,
+            },
+            Err(_) => Value {
+                a_str: arg,
+                a_num: 0,
+            },
+        }
+    }
+
+    fn valid_values<'r>(value: &'r Value) -> bool {
+        value.a_str == "-m" || value.a_str == "-q" || value.a_num > 0
+    }
+
+    fn set_values<'r>(tmr: &'r mut Self) -> impl FnMut(Value) -> () + 'r {
+        move |value: Value| {
+            if value.a_str == "-m" {
+                tmr.minutes = true;
+            } else if tmr.max_count == 0 {
+                tmr.max_count = value.a_num;
+            }
+        }
     }
 
     /// Starts the timer with the underlying time
@@ -101,12 +128,7 @@ mod tests {
 
     #[test]
     fn test_init() {
-        let args: Vec<String> = vec![
-            String::from(""),
-            "-m".to_string(),
-            "12".to_string(),
-            "c".to_string(),
-        ];
+        let args: Vec<String> = vec!["-m".to_string(), "12".to_string(), "c".to_string()];
         let tmr = Tima::init(args);
         assert_eq!(12, tmr.max_count);
         assert!(tmr.minutes);
