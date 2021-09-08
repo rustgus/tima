@@ -59,11 +59,11 @@ impl Tima {
         }
     }
 
-    fn valid_values<'r>(value: &'r Value) -> bool {
+    fn valid_values(value: &Value) -> bool {
         value.a_str == "-m" || value.a_str == "-q" || value.a_num > 0
     }
 
-    fn set_values<'r>(tmr: &'r mut Self) -> impl FnMut(Value) -> () + 'r {
+    fn set_values<'r>(tmr: &'r mut Self) -> impl FnMut(Value) + 'r {
         move |value: Value| {
             if value.a_str == "-m" {
                 tmr.minutes = true;

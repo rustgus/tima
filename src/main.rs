@@ -6,12 +6,12 @@
 //! ```
 //! where 5 is the number of seconds
 //! or minutes, with the `-m` option.
-mod tima;
-
+mod engine;
+use engine::*;
 use std::env;
 
 fn main() {
-    let tmr = crate::tima::Tima::init(env::args().skip(1).collect());
+    let tmr = Tima::init(env::args().skip(1).collect());
     println!("Tima started");
     tmr.start();
     println!("Tima finished");
