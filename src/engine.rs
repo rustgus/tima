@@ -63,6 +63,7 @@ impl Tima {
         value.a_str == "-m" || value.a_str == "-q" || value.a_num > 0
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(clippy::needless_lifetimes))]
     fn set_values<'r>(tmr: &'r mut Self) -> impl FnMut(Value) + 'r {
         move |value: Value| {
             if value.a_str == "-m" {
