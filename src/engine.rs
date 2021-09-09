@@ -14,7 +14,7 @@ use std::time::Duration;
 /// assert_eq!(12, tmr.max_count);
 /// assert!(!tmr.minutes);
 /// ```
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Tima {
     pub max_count: u64,
     pub minutes: bool,
@@ -38,12 +38,12 @@ impl Tima {
     /// Initialises a new Timer with the command
     /// line arguments passed in the argument `args`.
     pub fn init(args: Vec<String>) -> Self {
-        let mut tmr = Tima::new(0);
         args.into_iter()
             .map(Tima::convert_arguments)
             .filter(Tima::valid_values)
-            .for_each(Tima::set_values(&mut tmr));
-        tmr
+            .map(Tima::set_values)
+            .reduce(Tima::create_final_tima)
+            .unwrap_or_default()
     }
 
     fn convert_arguments(arg: String) -> Value {
@@ -63,15 +63,23 @@ impl Tima {
         value.a_str == "-m" || value.a_str == "-q" || value.a_num > 0
     }
 
-    #[cfg_attr(feature = "cargo-clippy", allow(clippy::needless_lifetimes))]
-    fn set_values<'r>(tmr: &'r mut Self) -> impl FnMut(Value) + 'r {
-        move |value: Value| {
-            if value.a_str == "-m" {
-                tmr.minutes = true;
-            } else if tmr.max_count == 0 {
-                tmr.max_count = value.a_num;
-            }
+    fn set_values(value: Value) -> Tima {
+        let mut tmr = Tima::new(0);
+        if value.a_str == "-m" {
+            tmr.minutes = true;
         }
+        tmr.max_count = value.a_num;
+        tmr
+    }
+
+    fn create_final_tima(tmr1: Tima, mut tmr2: Tima) -> Tima {
+        if tmr1.max_count > tmr2.max_count {
+            tmr2.max_count = tmr1.max_count
+        }
+        if tmr1.minutes {
+            tmr2.minutes = true
+        }
+        tmr2
     }
 
     /// Starts the timer with the underlying time
@@ -132,6 +140,19 @@ mod tests {
         let args: Vec<String> = vec!["-m".to_string(), "12".to_string(), "c".to_string()];
         let tmr = Tima::init(args);
         assert_eq!(12, tmr.max_count);
+        assert!(tmr.minutes);
+    }
+
+    #[test]
+    fn test_init_repeated_values() {
+        let args: Vec<String> = vec![
+            "-m".to_string(),
+            "12".to_string(),
+            "24".to_string(),
+            "-q".to_string(),
+        ];
+        let tmr = Tima::init(args);
+        assert_eq!(24, tmr.max_count);
         assert!(tmr.minutes);
     }
 }
