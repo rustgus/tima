@@ -1,9 +1,9 @@
 # Binary files
-/target
+/**/target
 
 # Coverage
-/coverage
+/**/coverage
 
 # Vim session
-/session.vim
+/**/session.vim
 

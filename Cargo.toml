@@ -1,11 +1,5 @@
-[package]
-name = "tima"
-version = "0.1.0"
-authors = ["Gus Garcia <pythongus@gmail.com>"]
-edition = "2018"
-license = "MIT"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-tima-engine = { path = "../tima-engine" }
+[workspace]
+members = [
+    "tima-app",
+    "tima-engine",
+]
