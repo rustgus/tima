@@ -6,9 +6,8 @@
 //! ```
 //! where 5 is the number of seconds
 //! or minutes, with the `-m` option.
-mod engine;
-use engine::*;
 use std::env;
+use tima_engine::engine::*;
 
 fn main() {
     let tmr = Tima::init(env::args().skip(1).collect());
