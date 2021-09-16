@@ -10,9 +10,10 @@ use std::time::Duration;
 /// Example:
 /// ```
 /// # use tima_engine::engine::Tima;
-/// let tmr = Tima::new(12);
+/// let mut tmr = Tima::new();
+/// tmr.max_count = 12;
 /// assert_eq!(12, tmr.max_count);
-/// assert!(!tmr.minutes);
+/// # assert!(!tmr.minutes);
 /// ```
 #[derive(Debug, Default)]
 pub struct Tima {
@@ -29,9 +30,9 @@ struct Value {
 /// Method implementation for the Timer struct.
 impl Tima {
     /// `new` method implementation, with `max_count` mandatory.
-    pub fn new(max_count: u64) -> Self {
+    pub fn new() -> Self {
         Tima {
-            max_count,
+            max_count: 0,
             minutes: false,
             quiet_mode: false,
         }
@@ -40,6 +41,7 @@ impl Tima {
     /// Initialises a new Timer with the command
     /// line arguments passed in the argument `args`.
     pub fn init(args: Vec<String>) -> Self {
+        let mut tmr = Tima::new();
         args.into_iter()
             .map(Tima::convert_arguments)
             .filter(Tima::valid_values)
@@ -112,22 +114,24 @@ mod tests {
 
     #[test]
     fn tima_new() {
-        let tmr = Tima::new(12);
-        assert_eq!(12, tmr.max_count);
+        let tmr = Tima::new();
+        assert_eq!(0, tmr.max_count);
         assert!(!tmr.minutes);
+        assert!(!tmr.quiet_mode);
     }
 
     #[test]
     fn new_with_minutes() {
-        let mut tmr = Tima::new(12);
+        let mut tmr = Tima::new();
         tmr.minutes = true;
-        assert_eq!(12, tmr.max_count);
+        assert_eq!(0, tmr.max_count);
         assert!(tmr.minutes);
     }
 
     #[test]
     fn start() {
-        let tmr = Tima::new(1);
+        let mut tmr = Tima::new();
+        tmr.max_count = 1;
         tmr.start();
     }
 
