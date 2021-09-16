@@ -18,6 +18,7 @@ use std::time::Duration;
 pub struct Tima {
     pub max_count: u64,
     pub minutes: bool,
+    pub quiet_mode: bool,
 }
 
 struct Value {
@@ -32,6 +33,7 @@ impl Tima {
         Tima {
             max_count,
             minutes: false,
+            quiet_mode: false,
         }
     }
 
@@ -103,6 +105,7 @@ mod tests {
         let tmr = Tima {
             max_count: 12,
             minutes: false,
+            quiet_mode: false,
         };
         assert_eq!(12, tmr.max_count);
     }
@@ -157,7 +160,7 @@ mod tests {
     }
 
     #[test]
-    fn quiet_mode() {
+    fn init_quiet_mode() {
         let args: Vec<String> = vec![
             "-m".to_string(),
             "12".to_string(),
@@ -165,6 +168,6 @@ mod tests {
             "-q".to_string(),
         ];
         let tmr = Tima::init(args);
-        assert!(tmr.quite_mode);
+        assert!(tmr.quiet_mode);
     }
 }
