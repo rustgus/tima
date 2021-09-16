@@ -44,10 +44,8 @@ impl Tima {
         let mut tmr = Tima::new();
         args.into_iter()
             .map(Tima::convert_arguments)
-            .filter(Tima::valid_values)
-            .map(Tima::set_values)
-            .reduce(Tima::create_final_tima)
-            .unwrap_or_default()
+            .for_each(Tima::create_tima(&mut tmr));
+        tmr
     }
 
     fn convert_arguments(arg: String) -> Value {
@@ -63,27 +61,17 @@ impl Tima {
         }
     }
 
-    fn valid_values(value: &Value) -> bool {
-        value.a_str == "-m" || value.a_str == "-q" || value.a_num > 0
-    }
-
-    fn set_values(value: Value) -> Tima {
-        let mut tmr = Tima::new(0);
-        if value.a_str == "-m" {
-            tmr.minutes = true;
+    #[cfg_attr(feature = "cargo-clippy", allow(clippy::needless_lifetimes))]
+    fn create_tima<'r>(tmr: &'r mut Self) -> impl FnMut(Value) + 'r {
+        move |value: Value| {
+            if value.a_str == "-m" {
+                tmr.minutes = true;
+            } else if value.a_str == "-q" {
+                tmr.quiet_mode = true;
+            } else if value.a_num > 0 {
+                tmr.max_count = value.a_num;
+            }
         }
-        tmr.max_count = value.a_num;
-        tmr
-    }
-
-    fn create_final_tima(tmr1: Tima, mut tmr2: Tima) -> Tima {
-        if tmr1.max_count > tmr2.max_count {
-            tmr2.max_count = tmr1.max_count
-        }
-        if tmr1.minutes {
-            tmr2.minutes = true
-        }
-        tmr2
     }
 
     /// Starts the timer with the underlying time
