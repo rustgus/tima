@@ -11,7 +11,9 @@ use tima_engine::engine::*;
 
 fn main() {
     let tmr = Tima::init(env::args().skip(1).collect());
-    println!("Tima started");
+    if !tmr.quiet_mode {
+        println!("Tima started");
+    }
     tmr.start();
     println!("Tima finished");
 }

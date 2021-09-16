@@ -99,7 +99,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_tima() {
+    fn tima() {
         let tmr = Tima {
             max_count: 12,
             minutes: false,
@@ -108,14 +108,14 @@ mod tests {
     }
 
     #[test]
-    fn test_tima_new() {
+    fn tima_new() {
         let tmr = Tima::new(12);
         assert_eq!(12, tmr.max_count);
         assert!(!tmr.minutes);
     }
 
     #[test]
-    fn test_new_with_minutes() {
+    fn new_with_minutes() {
         let mut tmr = Tima::new(12);
         tmr.minutes = true;
         assert_eq!(12, tmr.max_count);
@@ -123,20 +123,20 @@ mod tests {
     }
 
     #[test]
-    fn test_start() {
+    fn start() {
         let tmr = Tima::new(1);
         tmr.start();
     }
 
     #[test]
-    fn test_init_no_values() {
+    fn init_no_values() {
         let args: Vec<String> = vec![];
         let tmr = Tima::init(args);
         assert_eq!(0, tmr.max_count);
     }
 
     #[test]
-    fn test_init() {
+    fn init() {
         let args: Vec<String> = vec!["-m".to_string(), "12".to_string(), "c".to_string()];
         let tmr = Tima::init(args);
         assert_eq!(12, tmr.max_count);
@@ -144,7 +144,7 @@ mod tests {
     }
 
     #[test]
-    fn test_init_repeated_values() {
+    fn init_repeated_values() {
         let args: Vec<String> = vec![
             "-m".to_string(),
             "12".to_string(),
@@ -154,5 +154,17 @@ mod tests {
         let tmr = Tima::init(args);
         assert_eq!(24, tmr.max_count);
         assert!(tmr.minutes);
+    }
+
+    #[test]
+    fn quiet_mode() {
+        let args: Vec<String> = vec![
+            "-m".to_string(),
+            "12".to_string(),
+            "24".to_string(),
+            "-q".to_string(),
+        ];
+        let tmr = Tima::init(args);
+        assert!(tmr.quite_mode);
     }
 }
