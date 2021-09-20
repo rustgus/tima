@@ -10,20 +10,18 @@ use std::env;
 use tima_engine::engine::*;
 
 macro_rules! verbose {
-    ($tmr:ident $(,$txt:literal)?) => {
+    ($txt:literal, $tmr:expr) => {
         if !$tmr.quiet_mode {
-            $(
-                println!("{}: {} {}", $txt, $tmr.max_count, if $tmr.minutes { "minutes" } else { "seconds" });
-            )?
+            println!("{}: {} {}", $txt, $tmr.max_count, if $tmr.minutes { "minutes" } else { "seconds" });
         }
     };
 }
 
 fn main() {
     let tmr = Tima::init(env::args().skip(1).collect());
-    verbose!(tmr, "Tima started");
+    verbose!("Tima started", &tmr);
     tmr.start();
-    verbose!(tmr, "Tima finished");
+    verbose!("Tima finished", &tmr);
 }
 
 #[cfg(test)]
@@ -32,16 +30,20 @@ mod tests {
     use super::*;
 
     #[test]
+    /// Tests if the quiet mode with value false is working. It 
+    /// should not fail.
     fn verbose_with_quiet_mode() {
         let mut tmr = Tima::new();
         tmr.quiet_mode = true;
-        verbose!(tmr)
+        verbose!("", &tmr)
     }
 
     #[test]
+    /// Tests if the quiet mode with value true is working. It 
+    /// should not fail.
     fn verbose_without_quiet_mode() {
         let mut tmr = Tima::new();
         tmr.max_count = 10;
-        verbose!(tmr, "Tima started")
+        verbose!("Tima started", &tmr)
     }
 }
