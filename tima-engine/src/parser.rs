@@ -21,6 +21,7 @@ pub fn parse(text: Vec<String>) -> Vec<String> {
 mod tests {
 
     use super::*;
+
     #[test]
     fn test_parse_1s() {
         let text: Vec<String> = [
