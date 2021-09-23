@@ -3,6 +3,7 @@
 
 # Coverage
 /**/coverage
+/**/kcov*
 
 # Vim session
 /**/session.vim
