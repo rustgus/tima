@@ -1,3 +1,4 @@
+#![doc = include_str!("../../README.md")]
 //! Tima - A simple timer for humans in Rust
 //!
 //! Using the timer:
@@ -12,7 +13,12 @@ use tima_engine::engine::*;
 macro_rules! verbose {
     ($txt:literal, $tmr:expr) => {
         if !$tmr.quiet_mode {
-            println!("{}: {} {}", $txt, $tmr.max_count, if $tmr.minutes { "minutes" } else { "seconds" });
+            println!(
+                "{}: {} {}",
+                $txt,
+                $tmr.max_count,
+                if $tmr.minutes { "minutes" } else { "seconds" }
+            );
         }
     };
 }
@@ -30,7 +36,7 @@ mod tests {
     use super::*;
 
     #[test]
-    /// Tests if the quiet mode with value false is working. It 
+    /// Tests if the quiet mode with value false is working. It
     /// should not fail.
     fn verbose_with_quiet_mode() {
         let mut tmr = Tima::new();
@@ -39,7 +45,7 @@ mod tests {
     }
 
     #[test]
-    /// Tests if the quiet mode with value true is working. It 
+    /// Tests if the quiet mode with value true is working. It
     /// should not fail.
     fn verbose_without_quiet_mode() {
         let mut tmr = Tima::new();
