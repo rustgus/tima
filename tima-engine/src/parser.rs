@@ -5,7 +5,7 @@ use lazy_static::lazy_static;
 use regex::Regex;
 
 lazy_static! {
-    static ref RE: Regex = Regex::new(r"^(?P<time>\d+)(?P<unit>[a-zA-Z]*)$").unwrap();
+    static ref RE: Regex = Regex::new(r"^(?P<time>\d*)(?P<unit>[a-zA-Z]*)$").unwrap();
 }
 
 pub struct Components {
@@ -19,10 +19,16 @@ pub fn parse(text: Vec<String>) -> Vec<String> {
         let input = RE.captures(&item);
         match input {
             Some(item) => {
-                vec_input.push(item["time"].to_string());
-                vec_input.push(item["unit"].to_string());
+                let time = &item["time"];
+                if time != "" {
+                    vec_input.push(time.to_string());
+                }
+                let unit = &item["unit"];
+                if unit != "" {
+                    vec_input.push(unit.to_string());
+                }
             }
-            None => eprintln!("{:?}", input),
+            None => eprintln!("Input is invalid: {}", &item),
         };
     });
     vec_input
@@ -66,5 +72,15 @@ mod tests {
     #[test]
     fn parse_time_in_seconds() {
         assert_eq!(vec!["1", "s"], parse(vec!["1s".to_string()]));
+    }
+
+    #[test]
+    fn parse_time_only() {
+        assert_eq!(vec!["1"], parse(vec!["1".to_string()]));
+    }
+
+    #[test]
+    fn parse_unit_only() {
+        assert_eq!(vec!["milli"], parse(vec!["milli".to_string()]));
     }
 }
