@@ -14,8 +14,18 @@ pub struct Components {
 }
 
 pub fn parse(text: Vec<String>) -> Vec<String> {
-    let valid_input: Vec<String> = text.into_iter().filter(|item| RE.is_match(item)).collect();
-    valid_input.iter().map(|value| value.split("1").collect()).collect()
+    let mut vec_input: Vec<String> = vec![];
+    text.into_iter().for_each(|item| {
+        let input = RE.captures(&item);
+        match input {
+            Some(item) => {
+                vec_input.push(item["time"].to_string());
+                vec_input.push(item["unit"].to_string());
+            }
+            None => eprintln!("{:?}", input),
+        };
+    });
+    vec_input
 }
 
 #[cfg(test)]
@@ -33,7 +43,10 @@ mod tests {
             "1s1".to_string(),
         ]
         .to_vec();
-        let expected: Vec<String> = text[..4].to_vec();
+        let expected: Vec<String> = ["1", "s", "10", "sec", "101", "milli", "0", "h"]
+            .iter()
+            .map(|value| value.to_string())
+            .collect();
         assert_eq!(expected, parse(text));
     }
 
@@ -54,5 +67,4 @@ mod tests {
     fn parse_time_in_seconds() {
         assert_eq!(vec!["1", "s"], parse(vec!["1s".to_string()]));
     }
-
 }
