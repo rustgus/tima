@@ -34,6 +34,19 @@ pub fn parse(text: Vec<String>) -> Vec<String> {
     vec_input
 }
 
+#[macro_export]
+macro_rules! vec_string {
+    ($($val:expr),*) => {
+        {
+            let mut values: Vec<String> = Vec::new();
+            $(
+                values.push($val.to_string());
+            )*
+            values
+        }
+    };
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -49,10 +62,7 @@ mod tests {
             "1s1".to_string(),
         ]
         .to_vec();
-        let expected: Vec<String> = ["1", "s", "10", "sec", "101", "milli", "0", "h"]
-            .iter()
-            .map(|value| value.to_string())
-            .collect();
+        let expected: Vec<String> = vec_string!["1", "s", "10", "sec", "101", "milli", "0", "h"];
         assert_eq!(expected, parse(text));
     }
 
