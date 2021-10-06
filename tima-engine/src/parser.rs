@@ -51,6 +51,7 @@ macro_rules! vec_string {
 mod tests {
 
     use super::*;
+    use std::collections::HashMap;
 
     #[test]
     fn parse_1s() {
@@ -92,5 +93,29 @@ mod tests {
     #[test]
     fn parse_unit_only() {
         assert_eq!(vec!["milli"], parse(vec!["milli".to_string()]));
+    }
+
+    #[test]
+    fn normalise_units() {
+        let entries = vec_string!["1", "s", "10", "sec", "101", "milli", "0", "h", "1", "minute"];
+        let expected = vec_string!["s", "s", "l", "h", "m"];
+        let mut dictionary: HashMap<String, Vec<String>> = HashMap::new();
+        dictionary.insert("s".to_string(), vec_string!["sec", "second", "seconds"]);
+        dictionary.insert("m".to_string(), vec_string!["min", "minute", "minutes"]);
+        dictionary.insert("h".to_string(), vec_string!["hour", "hours"]);
+        dictionary.insert(
+            "l".to_string(),
+            vec_string!["milli", "millis", "millisecond", "milliseconds"],
+        );
+        let normalised: Vec<String> = entries.into_iter().map(|val| {
+            match val.as_str() {
+                "sec" | "seconds" | "second" | "s" => "s".to_string(),
+                "min" | "minute" | "minutes" | "m" => "m".to_string(),
+                "hour" | "hours" | "h" => "h".to_string(),
+                "milli" | "millis" | "millisecond" | "milliseconds" | "l" => "l".to_string(),
+                _ => "".to_string(),
+            }
+        }).filter(|val| val != "").collect();
+        assert_eq!(expected, normalised);
     }
 }
