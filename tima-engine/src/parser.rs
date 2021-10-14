@@ -20,11 +20,11 @@ pub fn parse(text: Vec<String>) -> Vec<String> {
         match input {
             Some(item) => {
                 let time = &item["time"];
-                if time != "" {
+                if !time.is_empty() {
                     vec_input.push(time.to_string());
                 }
                 let unit = &item["unit"];
-                if unit != "" {
+                if !unit.is_empty() {
                     vec_input.push(unit.to_string());
                 }
             }
@@ -32,6 +32,20 @@ pub fn parse(text: Vec<String>) -> Vec<String> {
         };
     });
     vec_input
+}
+
+pub fn normalise_units(entries: Vec<String>) -> Vec<String> {
+    entries
+        .into_iter()
+        .map(|val| match val.as_str() {
+            "sec" | "seconds" | "second" | "s" => "s".to_string(),
+            "min" | "minute" | "minutes" | "m" => "m".to_string(),
+            "hour" | "hours" | "h" => "h".to_string(),
+            "milli" | "millis" | "millisecond" | "milliseconds" | "l" => "l".to_string(),
+            _ => "".to_string(),
+        })
+        .filter(|val| val != "")
+        .collect()
 }
 
 #[macro_export]
@@ -51,7 +65,6 @@ macro_rules! vec_string {
 mod tests {
 
     use super::*;
-    use std::collections::HashMap;
 
     #[test]
     fn parse_1s() {
@@ -96,26 +109,18 @@ mod tests {
     }
 
     #[test]
-    fn normalise_units() {
+    fn normalise_units_with_empty_entries() {
+        let entries: Vec<String> = vec![];
+        let expected: Vec<String> = vec![];
+        let normalised: Vec<String> = normalise_units(entries);
+        assert_eq!(expected, normalised);
+    }
+
+    #[test]
+    fn normalise_units_with_valid_entries() {
         let entries = vec_string!["1", "s", "10", "sec", "101", "milli", "0", "h", "1", "minute"];
         let expected = vec_string!["s", "s", "l", "h", "m"];
-        let mut dictionary: HashMap<String, Vec<String>> = HashMap::new();
-        dictionary.insert("s".to_string(), vec_string!["sec", "second", "seconds"]);
-        dictionary.insert("m".to_string(), vec_string!["min", "minute", "minutes"]);
-        dictionary.insert("h".to_string(), vec_string!["hour", "hours"]);
-        dictionary.insert(
-            "l".to_string(),
-            vec_string!["milli", "millis", "millisecond", "milliseconds"],
-        );
-        let normalised: Vec<String> = entries.into_iter().map(|val| {
-            match val.as_str() {
-                "sec" | "seconds" | "second" | "s" => "s".to_string(),
-                "min" | "minute" | "minutes" | "m" => "m".to_string(),
-                "hour" | "hours" | "h" => "h".to_string(),
-                "milli" | "millis" | "millisecond" | "milliseconds" | "l" => "l".to_string(),
-                _ => "".to_string(),
-            }
-        }).filter(|val| val != "").collect();
+        let normalised: Vec<String> = normalise_units(entries);
         assert_eq!(expected, normalised);
     }
 }
